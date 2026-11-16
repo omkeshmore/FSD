@@ -1,0 +1,3 @@
+Rahul,IT,30000
+Amit,HR,25000
+Priya,Finance,40000

@@ -1,0 +1,20 @@
+Employee Salary Report
+
+Name: Rahul
+Department: IT
+Basic Salary: 30000
+Bonus: 3000
+Net Salary: 33000
+
+Name: Amit
+Department: HR
+Basic Salary: 25000
+Bonus: 2500
+Net Salary: 27500
+
+Name: Priya
+Department: Finance
+Basic Salary: 40000
+Bonus: 4000
+Net Salary: 44000
+

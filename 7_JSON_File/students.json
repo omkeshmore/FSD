@@ -1,0 +1,36 @@
+{
+    "students": [
+        {
+            "name": "Rahul",
+            "marks": {
+                "Maths": 85,
+                "Science": 90,
+                "English": 75
+            }
+        },
+        {
+            "name": "Amit",
+            "marks": {
+                "Maths": 30,
+                "Science": 45,
+                "English": 60
+            }
+        },
+        {
+            "name": "Priya",
+            "marks": {
+                "Maths": 95,
+                "Science": 92,
+                "English": 88
+            }
+        },
+        {
+            "name": "Sneha",
+            "marks": {
+                "Maths": 70,
+                "Science": 80,
+                "English": 32
+            }
+        }
+    ]
+}
