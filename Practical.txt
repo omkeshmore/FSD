@@ -1,0 +1,859 @@
+Practical 1: Shopping Bill Calculator
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shopping Bill</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            background-color: lightgray;
+        }
+
+        input {
+            padding: 8px;
+            margin: 5px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: blue;
+            color: white;
+            border: none;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Shopping Bill Calculator</h2>
+
+    <input type="number" id="p1" placeholder="Product 1"><br>
+    <input type="number" id="p2" placeholder="Product 2"><br>
+    <input type="number" id="p3" placeholder="Product 3"><br>
+    <input type="number" id="p4" placeholder="Product 4"><br>
+
+    <button onclick="calculate()">Calculate Bill</button>
+
+    <div id="result"></div>
+
+    <script>
+
+        const calculate = () => {
+
+            let p1 = Number(document.getElementById("p1").value);
+            let p2 = Number(document.getElementById("p2").value);
+            let p3 = Number(document.getElementById("p3").value);
+            let p4 = Number(document.getElementById("p4").value);
+
+            let total = p1 + p2 + p3 + p4;
+
+            let discount = 0;
+
+            if (total > 3000) {
+                discount = total * 15 / 100;
+            }
+
+            let finalAmount = total - discount;
+
+            document.getElementById("result").innerHTML =
+                `Total: ₹${total}<br>
+                 Discount: ₹${discount}<br>
+                 Final Amount: ₹${finalAmount}`;
+
+        };
+
+    </script>
+
+</body>
+</html>
+
+Practical 2: Student Result Calculator
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Result Calculator</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            background-color: lightgray;
+        }
+
+        input {
+            padding: 8px;
+            margin: 5px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: blue;
+            color: white;
+            border: none;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Student Result Calculator</h2>
+
+    <input type="number" id="count" placeholder="Enter number of subjects">
+
+    <button onclick="createFields()">Submit</button>
+
+    <div id="subjects"></div>
+
+    <div id="result"></div>
+
+    <script>
+
+        const createFields = () => {
+
+            let count = Number(document.getElementById("count").value);
+
+            let output = "";
+
+            if (count < 2) {
+                alert("Enter at least 2 subjects");
+                return;
+            }
+
+            for (let i = 1; i <= count; i++) {
+
+                output += `
+                    <input type="text" id="name${i}" placeholder="Subject ${i} Name">
+                    <input type="number" id="mark${i}" placeholder="Marks (0-100)">
+                    <br>
+                `;
+            }
+
+            output += `<br><button onclick="showResult()">Calculate Result</button>`;
+
+            document.getElementById("subjects").innerHTML = output;
+        };
+
+
+        const calculate = (...marks) => {
+
+            let total = 0;
+
+            marks.forEach(mark => {
+                total += mark;
+            });
+
+            let average = total / marks.length;
+
+            let percentage = average;
+
+            let status = marks.every(mark => mark >= 35);
+
+            return `
+                Total Marks: ${total}<br>
+                Average: ${average.toFixed(2)}<br>
+                Percentage: ${percentage.toFixed(2)}%<br>
+                Result: ${status ? "PASS" : "FAIL"}
+            `;
+        };
+
+
+        const showResult = () => {
+
+            let count = Number(document.getElementById("count").value);
+
+            let marks = [];
+
+            for (let i = 1; i <= count; i++) {
+
+                let name = document.getElementById("name" + i).value;
+                let mark = document.getElementById("mark" + i).value;
+
+                if (name === "" || mark === "") {
+                    alert("Please fill all details");
+                    return;
+                }
+
+                mark = Number(mark);
+
+                if (mark < 0 || mark > 100) {
+                    alert("Marks must be between 0 and 100");
+                    return;
+                }
+
+                marks.push(mark);
+            }
+
+            document.getElementById("result").innerHTML = calculate(...marks);
+        };
+
+    </script>
+
+</body>
+</html>
+
+Practical 3:Employee Bonus Eligibility
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Bonus</title>
+</head>
+<body>
+
+    <h2>Employee Bonus Eligibility</h2>
+
+    Name: <input id="name"><br><br>
+    Department: <input id="dept"><br><br>
+    Salary: <input type="number" id="salary"><br><br>
+
+    <button onclick="addEmployee()">Add Employee</button>
+    <button onclick="filterEmployees()">Check Bonus</button>
+
+    <h3>All Employees</h3>
+    <table border="1" id="all"></table>
+
+    <h3>Eligible Employees</h3>
+    <table border="1" id="eligible"></table>
+
+    <script>
+
+        class Employee {
+            constructor(name, dept, salary) {
+                this.name = name;
+                this.department = dept;
+                this.salary = salary;
+            }
+
+            isEligibleForBonus() {
+                return this.salary > 50000;
+            }
+        }
+
+        let employees = [];
+
+        function addEmployee() {
+            let name = document.getElementById("name").value;
+            let dept = document.getElementById("dept").value;
+            let salary = Number(document.getElementById("salary").value);
+
+            employees.push(new Employee(name, dept, salary));
+
+            displayEmployees();
+        }
+
+        function displayEmployees() {
+            let data = "<tr><th>Name</th><th>Department</th><th>Salary</th></tr>";
+
+            employees.forEach(emp => {
+                data += `<tr><td>${emp.name}</td>
+                <td>${emp.department}</td>
+                <td>${emp.salary}</td></tr>`;
+            });
+
+            document.getElementById("all").innerHTML = data;
+        }
+
+        function filterEmployees() {
+            let eligible = employees.filter(emp => emp.isEligibleForBonus());
+
+            let data = "<tr><th>Name</th><th>Department</th><th>Salary</th></tr>";
+
+            eligible.forEach(emp => {
+                data += `<tr><td>${emp.name}</td>
+                <td>${emp.department}</td>
+                <td>${emp.salary}</td></tr>`;
+            });
+
+            document.getElementById("eligible").innerHTML = data;
+        }
+
+    </script>
+
+</body>
+</html>
+```
+
+Practical 4: Employee Salary Report
+employees.txt
+
+Rahul,IT,50000
+Priya,HR,45000
+Amit,Finance,60000
+Sneha,Marketing,55000
+Rohan,IT,40000
+Neha,Finance,70000
+
+EmployeeSalaryReport.js
+
+const fs = require("fs");
+
+fs.readFile("employees.txt", "utf8", (err, data) => {
+
+    if (err) {
+        console.log(err);
+        return;
+    }
+
+    let report = "";
+
+    data.trim().split("\n").forEach((emp) => {
+
+        let d = emp.split(",");
+
+        let name = d[0];
+        let dept = d[1];
+        let salary = Number(d[2]);
+
+        let bonus = salary * 0.1;
+        let net = salary + bonus;
+
+        report += `${name} ${dept} Salary: ${salary} Bonus: ${bonus} Net: ${net}\n`;
+    });
+
+    fs.writeFile("salaryReport.txt", report, (err) => {
+
+        if (err)
+            console.log(err);
+        else
+            console.log("Report created successfully!");
+
+    });
+
+});
+
+To Run: Terminal> + button open cmd > node -v > npm -v > node EmployeeSalaryReport.js
+
+Practical 5: Bank Account Deposit & Withdrawal
+account.js 
+
+let balance = 1000;
+
+function deposit(amount) {
+    balance += amount;
+    return balance;
+}
+
+function withdraw(amount) {
+    if (amount > balance)
+        return "Insufficient Balance";
+
+    balance -= amount;
+    return balance;
+}
+
+module.exports = { deposit, withdraw };
+
+app.js
+
+const account = require("./account");
+
+console.log("Initial Balance: ₹1000");
+
+console.log("After Deposit: ₹" + account.deposit(500));
+
+console.log("After Withdrawal: ₹" + account.withdraw(300));
+
+To run: node app.js
+
+Practical 6:Bank Loan Portal (Node.js)
+index.html
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Bank Loan Portal</title>
+
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial;
+            background: #eee;
+        }
+
+        input, button {
+            padding: 10px;
+            margin: 5px;
+        }
+
+        button {
+            background: navy;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Bank Loan Portal</h2>
+
+    <button onclick="schemes()">Loan Schemes</button>
+    <div id="s"></div>
+
+    <h3>EMI Calculator</h3>
+
+    <input id="amount" placeholder="Amount">
+    <input id="rate" placeholder="Rate">
+    <input id="years" placeholder="Years">
+
+    <button onclick="emi()">Calculate EMI</button>
+    <div id="r"></div>
+
+    <h3>Loan Eligibility</h3>
+
+    <input id="income" placeholder="Income">
+    <input id="loan" placeholder="Loan">
+
+    <button onclick="check()">Check Eligibility</button>
+    <div id="e"></div>
+
+    <script>
+        function schemes() {
+            fetch("/schemes")
+            .then(res => res.json())
+            .then(data => s.innerHTML = data.join("<br>"));
+        }
+
+        function emi() {
+            fetch(`/emi?amount=${amount.value}&rate=${rate.value}&years=${years.value}`)
+            .then(res => res.json())
+            .then(data => r.innerHTML = "EMI: ₹" + data.emi);
+        }
+
+        function check() {
+            fetch(`/eligibility?income=${income.value}&loan=${loan.value}`)
+            .then(res => res.json())
+            .then(data => e.innerHTML = data.message);
+        }
+    </script>
+
+</body>
+</html>
+
+server.js
+const http = require("http");
+const fs = require("fs");
+
+http.createServer((req, res) => {
+    let url = new URL(req.url, "http://localhost");
+
+    if (url.pathname == "/") {
+        res.end(fs.readFileSync("index.html"));
+    }
+
+    else if (url.pathname == "/schemes") {
+        res.end(JSON.stringify([
+            "Home Loan - 8.5%",
+            "Personal Loan - 11.5%",
+            "Education Loan - 9%"
+        ]));
+    }
+
+    else if (url.pathname == "/emi") {
+        let p = Number(url.searchParams.get("amount"));
+        let r = Number(url.searchParams.get("rate")) / 1200;
+        let n = Number(url.searchParams.get("years")) * 12;
+
+        let emi = p * r * Math.pow(1 + r, n) /
+                  (Math.pow(1 + r, n) - 1);
+
+        res.end(JSON.stringify({emi: emi.toFixed(2)}));
+    }
+
+    else if (url.pathname == "/eligibility") {
+        let income = Number(url.searchParams.get("income"));
+        let loan = Number(url.searchParams.get("loan"));
+
+        res.end(JSON.stringify({
+            message: loan <= income * 10 ?
+            "Eligible for Loan" : "Not Eligible"
+        }));
+    }
+
+    else {
+        res.statusCode = 404;
+        res.end("404 Page Not Found");
+    }
+
+}).listen(3000, () => console.log("Server running on port 3000"));
+
+Practical 7: Student Result Using JSON (Node.js)
+students.json
+[
+    { "name": "Prem", "marks": [80, 75, 90] },
+    { "name": "Amit", "marks": [60, 55, 70] },
+    { "name": "Rahul", "marks": [30, 45, 35] },
+    { "name": "Sneha", "marks": [95, 90, 98] }
+]
+
+studentResult.js
+const fs = require("fs");
+
+let students = JSON.parse(fs.readFileSync("students.json"));
+
+let topper = "";
+let highestTotal = 0;
+let subjectHigh = [0, 0, 0];
+let failed = [];
+
+students.forEach((s) => {
+    let total = s.marks.reduce((a, b) => a + b, 0);
+
+    let percentage = total / 3;
+
+    let grade =
+        percentage >= 75 ? "A" :
+        percentage >= 60 ? "B" :
+        percentage >= 40 ? "C" : "F";
+
+    console.log("\nName:", s.name);
+    console.log("Total:", total);
+    console.log("Percentage:", percentage + "%");
+    console.log("Grade:", grade);
+
+    if (total > highestTotal) {
+        highestTotal = total;
+        topper = s.name;
+    }
+
+    s.marks.forEach((m, i) => {
+        if (m > subjectHigh[i])
+            subjectHigh[i] = m;
+    });
+
+    if (s.marks.some((m) => m < 35))
+        failed.push(s.name);
+});
+
+console.log("\nClass Topper:", topper);
+console.log("Subject Highest Marks:", subjectHigh);
+console.log("Failed Students:", failed);
+
+Practical 8: Food Delivery System (Express.js)
+
+npm init -y
+npm install express
+
+server.js
+
+const express = require("express");
+const app = express();
+
+app.use(express.json());
+
+// Display Restaurants
+app.get("/restaurants", (req, res) => {
+    res.send("Restaurants: Domino's, Pizza Hut, McDonald's");
+});
+
+// Display Food Menu
+app.get("/menu", (req, res) => {
+    res.send("Menu: Pizza - 200, Burger - 100, Sandwich - 80");
+});
+
+// Place Order
+app.post("/order", (req, res) => {
+    res.send("Order placed successfully!");
+});
+
+// Check Order Status
+app.get("/status/:id", (req, res) => {
+    res.send("Order " + req.params.id + " is preparing");
+});
+
+// Handle Invalid Routes
+app.use((req, res) => {
+    res.status(404).send("404 - Route Not Found");
+});
+
+// Start Server
+app.listen(3000, () => {
+    console.log("Server running at http://localhost:3000");
+});
+
+Output: node server.js
+A. Display Restaurants
+
+URL:
+http://localhost:3000/restaurants
+
+Output:
+Restaurants: Domino's, Pizza Hut, McDonald's
+
+B. Display Food Menu
+
+URL:
+http://localhost:3000/menu
+
+Output:
+Menu: Pizza - 200, Burger - 100, Sandwich - 80
+
+C. Check Order Status
+
+URL:
+http://localhost:3000/status/101
+
+Output:
+Order 101 is preparing
+
+D. Place Order
+
+Open a new CMD terminal and execute:
+curl.exe -X POST http://localhost:3000/order
+
+Output:
+Order placed successfully!
+
+E. Test Invalid Route
+
+Open:
+http://localhost:3000/invalid
+
+Output:
+404 - Route Not Found
+
+Practical 9: Employee REST API using Express.js
+npm init -y
+npm install express
+server.js
+
+const express = require("express");
+const app = express();
+
+app.use(express.json());
+
+// Employee Data
+let employees = [
+    { id: 1, name: "Prem", salary: 30000 },
+    { id: 2, name: "Amit", salary: 40000 }
+];
+
+// GET - Display All Employees
+app.get("/employees", (req, res) => {
+    res.json(employees);
+});
+
+// POST - Add Employee
+app.post("/employees", (req, res) => {
+    employees.push(req.body);
+    res.send("Employee Added");
+});
+
+// PUT - Update Employee
+app.put("/employees/:id", (req, res) => {
+    let emp = employees.find((e) => e.id == req.params.id);
+
+    if (emp) {
+        emp.name = req.body.name;
+        emp.salary = req.body.salary;
+
+        res.send("Employee Updated");
+    } else {
+        res.send("Employee Not Found");
+    }
+});
+
+// DELETE - Delete Employee
+app.delete("/employees/:id", (req, res) => {
+    let old = employees.length;
+
+    employees = employees.filter(
+        (e) => e.id != req.params.id
+    );
+
+    res.send(
+        old == employees.length
+            ? "Employee Not Found"
+            : "Employee Deleted"
+    );
+});
+
+// Handle Invalid Routes
+app.use((req, res) => {
+    res.status(404).send("404 - Route Not Found");
+});
+
+// Start Server
+app.listen(3000, () => {
+    console.log("Server running on port 3000");
+});
+
+Output/Test: Step 1: Start the server
+In VS Code terminal, run:
+node server.js
+
+You should see:
+Server running on port 3000
+
+Keep this terminal running.
+Step 2: Test GET – Display Employees
+1. Open Chrome.
+2. Enter this URL:
+   http://localhost:3000/employees
+Expected output:
+[
+  {
+    "id": 1,
+    "name": "Prem",
+    "salary": 30000
+  },
+  {
+    "id": 2,
+    "name": "Amit",
+    "salary": 40000
+  }
+]
+
+GET is working if you see these two employees.
+Step 3: Test POST – Add Employee
+Open a second CMD terminal in VS Code.
+
+Run:
+curl.exe -X POST http://localhost:3000/employees -H "Content-Type: application/json" -d "{\"id\":3,\"name\":\"Rahul\",\"salary\":35000}"
+
+Expected output:
+Employee Added
+
+Now refresh your browser:
+
+http://localhost:3000/employees
+
+You should see Rahul added.
+Step 4: Test PUT – Update Employee
+In the second terminal, run:
+curl.exe -X PUT http://localhost:3000/employees/1 -H "Content-Type: application/json" -d "{\"name\":\"Prem More\",\"salary\":45000}"
+
+Expected output:
+Employee Updated
+
+Refresh the browser. Prem's name and salary should be updated.
+Step 5: Test DELETE – Delete Employee
+Run:
+curl.exe -X DELETE http://localhost:3000/employees/2
+
+Expected output:
+Employee Deleted
+
+Refresh the browser. Amit should be removed.
+Practical 9 – Testing Summary
+Method	Operation	Expected result
+GET	Display employees	Employee list
+POST	Add employee	Employee Added
+PUT	Update employee	Employee Updated
+DELETE	Delete employee	Employee Deleted
+
+Practical 10: Travel Booking System
+npm create vite@latest travel-app -- --template react
+cd travel-app
+npm install
+npm run dev
+app.jsx
+
+import { useState } from "react";
+import "./App.css";
+
+function Home() {
+  return <h2>Welcome to Travel Booking System</h2>;
+}
+
+function Destinations() {
+  return <h3>Destinations: Goa, Manali, Kashmir</h3>;
+}
+
+function Packages() {
+  return (
+    <div>
+      <h3>Tour Packages</h3>
+      <p>Goa - ₹5000 (3 Days)</p>
+      <p>Manali - ₹8000 (5 Days)</p>
+      <p>Kashmir - ₹12000 (7 Days)</p>
+    </div>
+  );
+}
+
+function Booking() {
+  const [name, setName] = useState("");
+  const [place, setPlace] = useState("");
+
+  function submitBooking(e) {
+    e.preventDefault();
+    alert("Booking Successful for " + name + " - " + place);
+  }
+
+  return (
+    <div>
+      <h3>Booking Form</h3>
+
+      <form onSubmit={submitBooking}>
+        <input
+          placeholder="Name"
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+
+        <select onChange={(e) => setPlace(e.target.value)} required>
+          <option value="">Select Package</option>
+          <option>Goa</option>
+          <option>Manali</option>
+          <option>Kashmir</option>
+        </select>
+
+        <button type="submit">Book Now</button>
+      </form>
+    </div>
+  );
+}
+
+function Contact() {
+  return <h3>Contact: travel@gmail.com</h3>;
+}
+
+export default function App() {
+  return (
+    <div>
+      <h1>Travel Booking System</h1>
+
+      <Home />
+      <Destinations />
+      <Packages />
+      <Booking />
+      <Contact />
+    </div>
+  );
+}
+
+app.css
+body {
+  font-family: Arial;
+  text-align: center;
+  background: lightblue;
+}
+
+div {
+  margin: 15px;
+}
+
+input,
+select,
+button {
+  padding: 10px;
+  margin: 5px;
+}
+
+http://localhost:5173/
